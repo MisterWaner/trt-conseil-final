@@ -1,12 +1,12 @@
 import { FaPencil, FaTrashCan, FaEye, FaCheck } from "react-icons/fa6";
 
-interface CustomTableProps {
+type TableProps = {
     data: Record<string, number>[];
     columsToShow: string[];
     subject: string;
-}
+};
 
-const Table: React.FC<CustomTableProps> = ({ data, columsToShow, subject }) => {
+const Table = ({ data, columsToShow, subject }: TableProps) => {
     return (
         <table className="min-w-full border border-black divide-y divide-black">
             <thead className="bg-black text-white text-center">

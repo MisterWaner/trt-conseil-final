@@ -9,7 +9,7 @@ const links: Array<{ label: string; href: string }> = [
     { label: "Déconnexion", href: "/login" },
 ];
 
-export default function Navbar() {
+export default function ConsultantNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {

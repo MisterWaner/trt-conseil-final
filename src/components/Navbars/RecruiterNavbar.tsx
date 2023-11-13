@@ -3,12 +3,13 @@ import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const links: Array<{ label: string; href: string }> = [
-    { label: "Accueil", href: "/admin" },
-    { label: "Les consultants", href: "/admin/consultants" },
+    { label: "Accueil", href: "/recruiter" },
+    { label: "Nos offres", href: "/recruiter/nos-offres" },
+    { label: "Les candidatures", href: "/recruiter/candidatures" },
     { label: "Déconnexion", href: "/login" },
 ];
 
-export default function AdminNavbar() {
+export default function RecruiterNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {

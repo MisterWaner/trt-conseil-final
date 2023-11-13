@@ -33,6 +33,8 @@ export default function Candidats() {
         (row) => {
             const filteredRow: Record<string, number> = {};
             columnsToShow.forEach((column) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 filteredRow[column] = row[column];
             });
             return filteredRow;

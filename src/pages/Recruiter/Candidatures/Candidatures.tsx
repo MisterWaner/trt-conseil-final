@@ -1,7 +1,6 @@
 import AuthWrapper from "../../../components/Wrapper/AuthWrapper";
 import Table from "../../../components/Table/Table";
 
-
 const dataFromBackend = [
     {
         id: 1,
@@ -53,12 +52,10 @@ const dataFromBackend = [
     },
 ];
 
-const columnsToShow: string[] = ["id", "firstName", "lastName", "email"];
+const columnsToShow = ["id", "firstName", "lastName", "email"];
 
-
-export default function Consultants() {
-
-    const filteredData = dataFromBackend.map(
+export default function Candidatures() {
+    const filteredData: Record<string, number>[] = dataFromBackend.map(
         (row) => {
             const filteredRow: Record<string, number> = {};
             columnsToShow.forEach((column) => {
@@ -69,21 +66,17 @@ export default function Consultants() {
             return filteredRow;
         }
     );
-
     return (
         <AuthWrapper>
             <div className="flex flex-col h-full w-full">
-            <h1
-                    className="font-medium text-center 
-                text-3xl"
-                >
-                    Les consultants
+                <h1 className="font-medium text-center text-xl md:text-3xl">
+                    Les candidatures
                 </h1>
-                <section className="w-full mt-9 overflow-x-auto">
+                <section className="mt-9 overflow-x-auto">
                     <Table
                         data={filteredData}
                         columsToShow={columnsToShow}
-                        subject=""
+                        subject="applications"
                     />
                 </section>
             </div>
