@@ -1,16 +1,12 @@
-import Wrapper from "../../../components/Wrapper/Wrapper";
-
 export default function Connexion() {
     return (
-        <Wrapper>
-            <main className="container-xl mx-auto h-full">
+        <main className="relative min-h-screen flex flex-col wrapper">
+            <div className="container-xl mx-auto flex-grow flex flex-col justify-center items-center">
                 <section className="flex flex-col justify-center items-center h-full">
                     <h3 className="font-medium white-shadow text-3xl">
                         Connexion
                     </h3>
-                    <form
-                        className="flex flex-col items-center justify-between form rounded-md p-10 mt-4"
-                    >
+                    <form className="flex flex-col items-center justify-between form rounded-md p-10 mt-4">
                         <div className="flex flex-col mb-4 w-full">
                             <label className="font-bold" htmlFor="email">
                                 Email
@@ -35,14 +31,11 @@ export default function Connexion() {
                             />
                         </div>
                         <div className="flex justify-center w-full mt-4 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
-                            <button type="submit">
-                                Se connecter
-                            </button>
+                            <button type="submit">Se connecter</button>
                         </div>
                     </form>
                 </section>
-            </main>
-
-        </Wrapper>
+            </div>
+        </main>
     );
 }
