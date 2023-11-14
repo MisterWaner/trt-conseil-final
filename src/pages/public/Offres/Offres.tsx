@@ -1,6 +1,28 @@
-import OfferCard from "../../../components/Cards/OfferCard";
+import { OfferCard } from "../../../components/Cards/OfferCard";
+import Axios from "../../../lib/axios";
+import { useEffect, useState } from "react";
 
 export default function Offres() {
+    const [offers, setOffers] = useState([]);
+
+    const fetchOffers = async () => {
+        try {
+            const response = await Axios.get("/offers/approved");
+            if (response.status === 200) {
+                console.log(response.data);
+            } else {
+                console.error(response, "Une erreur est survenue");
+            }
+            setOffers(response.data);
+        } catch (error) {
+            console.error(error, "Une erreur est survenue");
+        }
+    };
+
+    useEffect(() => {
+        fetchOffers();
+    }, []);
+
     return (
         <div className="flex flex-col min-h-screen bg-zinc-100">
             <main className="container-xl mx-10 h-full mt-[100px] md:mx-20">
@@ -27,11 +49,9 @@ export default function Offres() {
                         </div>
                     </article>
                     <article className="mt-10 flex flex-wrap gap-5 justify-center sm:justify-between md:justify-start">
-                        <OfferCard />
-                        <OfferCard />
-                        <OfferCard />
-                        <OfferCard />
-                        <OfferCard />
+                        {offers.map((offer) => (
+                            <OfferCard offer={offer} key={offer} />
+                        ))}
                     </article>
                 </section>
             </main>

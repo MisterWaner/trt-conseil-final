@@ -1,24 +1,37 @@
 import { FaHeartCirclePlus, FaShare } from "react-icons/fa6";
 
-export default function OfferCard() {
+interface Offer {
+    title: string;
+    reference: string;
+    salary: number;
+    schedules: string;
+    place: string;
+    contractType: string;
+}
+
+interface OfferCardProps {
+    offer: Offer;
+}
+
+export const OfferCard = ({ offer }: OfferCardProps) => {
     return (
         <div className="bg-white w-[250px] md:w-[300px] p-6 rounded-md border-2 border-stone-300 transition duration-200 hover:scale-[1.05]">
             <div className="flex flex-col">
                 <div className="flex flex-col justify-between mb-2">
-                    <p className="font-semibold">Titre</p>
-                    <p className="text-stone-300 font-semibold">Référence</p>
+                    <p className="font-semibold">{offer.title}</p>
+                    <p className="text-stone-300 font-semibold">{offer.reference}</p>
                 </div>
                 <div className="text-sm mb-3">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Voluptates consequuntur ipsa magnam, numquam ducimus commodi
-                    repellat suscipit nam pariatur distinctio quidem dolor
-                    quaerat ea amet?
+                    <p>{offer.salary} €</p>
+                    <p>{offer.schedules}</p>
+                    <p>{offer.place}</p>
+                    <p>{offer.contractType}</p>
                 </div>
                 <div className="text-sm">
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Possimus qui amet totam quidem voluptatum similique ut
-                    adipisci quisquam! Natus architecto alias aliquid tenetur,
-                    inventore obcaecati!
+                    Possimus qui amet totam quidem voluptatum similique ut adipisci
+                    quisquam! Natus architecto alias aliquid tenetur, inventore
+                    obcaecati!
                 </div>
                 <div className="flex flex-col mb-2 w-full">
                     <button className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
@@ -39,4 +52,4 @@ export default function OfferCard() {
             </div>
         </div>
     );
-}
+};

@@ -40,12 +40,34 @@ export const RegisterSchema = z
                         "Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial et doit faire 8 caractères minimum et 20 caractères maximum",
                 }
             ),
-        roleId: z.string().min(1, { message: "Veuillez renseigner votre rôle" }),
+        roleId: z
+            .string()
+            .min(1, { message: "Veuillez renseigner votre rôle" }),
     })
     .refine((data) => data.password === data.confirmation, {
         message: "Le mot de passe et la confirmation ne correspondent pas",
         path: ["confirmation"],
     });
+
+export const RegisterConsultantSchema = z.object({
+    firstname: z
+        .string()
+        .min(2, {
+            message: "Votre prénom doit contenir au minimum 2 caractères",
+        })
+        .max(50, {
+            message: "Votre prénom doit contenir au maximum 50 caractères",
+        })
+        .trim(),
+    lastname: z
+        .string()
+        .min(2, {
+            message: "Votre nom doit contenir au minimum 2 caractères",
+        })
+        .max(50, {
+            message: "Votre nom doit contenir au maximum 50 caractères",
+        }),
+});
 
 export const LoginUserSchema = z.object({
     email: z
@@ -178,3 +200,4 @@ export type RegisterSchema = z.infer<typeof RegisterSchema>;
 export type LoginUserSchema = z.infer<typeof LoginUserSchema>;
 export type UpdateUserSchema = z.infer<typeof UpdateUserSchema>;
 export type UpdatePasswordSchema = z.infer<typeof UpdatePasswordSchema>;
+export type RegisterConsultantSchema = z.infer<typeof RegisterConsultantSchema>;
