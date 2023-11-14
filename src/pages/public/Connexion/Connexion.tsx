@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Modal from "../../../components/Modal/Modal";
 import Axios from "../../../lib/axios";
 import Cookies from "js-cookie";
 import { LoginUserSchema } from "../../../lib/Validations/user.schema";
@@ -10,6 +11,13 @@ import PublicWrapper from "../../../components/Wrapper/PublicWrapper";
 export default function Connexion() {
     const navigate = useNavigate();
     const [role, setRole] = useState("");
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [modalContent, setModalContent] = useState({
+        title: "",
+        message: "",
+    });
 
     const {
         register,
@@ -43,50 +51,55 @@ export default function Connexion() {
 
     //Handle form submit
     const loginUser = async (data: unknown) => {
-        console.log(data);
-
         try {
             const response = await Axios.post("auth/login", data);
-            console.log(response.data);
 
             if (response.status === 200) {
-                const { token, id, roleId, firstname, email } = response.data;
-                console.log(token, id, roleId, firstname, email);
+                const { token, id, roleId, email, isApproved } = response.data;
+                console.log(token, id, roleId, email, isApproved);
 
-                Cookies.set("token", token, {
-                    secure: true,
-                    sameSite: "None",
-                    expires: 1,
-                });
-                Cookies.set("id", id, {
-                    secure: true,
-                    sameSite: "None",
-                    expires: 1,
-                });
-                Cookies.set("roleId", roleId, {
-                    secure: true,
-                    sameSite: "None",
-                    expires: 1,
-                });
-                Cookies.set("firstname", firstname, {
-                    secure: true,
-                    sameSite: "None",
-                    expires: 1,
-                });
-                Cookies.set("email", email, {
-                    secure: true,
-                    sameSite: "None",
-                    expires: 1,
-                });
+                if (isApproved === true) {
+                    Cookies.set("token", token, {
+                        secure: true,
+                        sameSite: "None",
+                        expires: 1,
+                    });
+                    Cookies.set("id", id, {
+                        secure: true,
+                        sameSite: "None",
+                        expires: 1,
+                    });
+                    Cookies.set("roleId", roleId, {
+                        secure: true,
+                        sameSite: "None",
+                        expires: 1,
+                    });
+                    Cookies.set("email", email, {
+                        secure: true,
+                        sameSite: "None",
+                        expires: 1,
+                    });
 
-                if (roleId === 1) {
-                    navigate("/admin");
-                } else if (roleId === 2) {
-                    navigate("/consultant");
-                } else if (roleId === 3) {
-                    navigate("/recruiter");
-                } else if (roleId === 4) {
-                    navigate("/candidat");
+                    if (roleId === 1) {
+                        navigate("/admin");
+                    } else if (roleId === 2) {
+                        navigate("/consultant");
+                    } else if (roleId === 3) {
+                        navigate("/recruiter");
+                    } else if (roleId === 4) {
+                        navigate("/candidat");
+                    }
+                } else {
+                    setModalContent({
+                        title: "Compte non approuvé",
+                        message:
+                            "Votre compte n'a pas encore été approuvé par un consultant, veuillez réessayer plus tard",
+                    });
+                    setIsModalOpen(true);
+                    setTimeout(() => {
+                        setIsModalOpen(false);
+                        navigate("/");
+                    }, 3000);
                 }
             } else {
                 console.error(response, "Échec de l'authentification");
@@ -97,19 +110,15 @@ export default function Connexion() {
     };
     return (
         <>
-            {
-                role === "1" ? (
-                    navigate("/admin")
-                ) : role === "2" ? (
-                    navigate("/consultant")
-                ) : role === "3" ? (
-                    navigate("/recruiter")
-                ) : role === "4" ? (
-                    navigate("/candidat")
-                ) : (
-                    ""
-                )
-            }
+            {role === "1"
+                ? navigate("/admin")
+                : role === "2"
+                ? navigate("/consultant")
+                : role === "3"
+                ? navigate("/recruiter")
+                : role === "4"
+                ? navigate("/candidat")
+                : ""}
             <PublicWrapper>
                 <section className="flex flex-col justify-center items-center h-full">
                     <h3 className="font-medium white-shadow text-3xl">
@@ -163,6 +172,11 @@ export default function Connexion() {
                         </div>
                     </form>
                 </section>
+                <Modal
+                    onClose={() => setIsModalOpen(false)}
+                    isOpen={isModalOpen}
+                    content={modalContent.message}
+                />
             </PublicWrapper>
         </>
     );

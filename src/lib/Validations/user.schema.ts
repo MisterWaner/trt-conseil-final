@@ -40,7 +40,7 @@ export const RegisterSchema = z
                         "Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial et doit faire 8 caractères minimum et 20 caractères maximum",
                 }
             ),
-        roleId: z.number().int().positive(),
+        roleId: z.string().min(1, { message: "Veuillez renseigner votre rôle" }),
     })
     .refine((data) => data.password === data.confirmation, {
         message: "Le mot de passe et la confirmation ne correspondent pas",
@@ -144,7 +144,14 @@ export const UpdatePasswordSchema = z
             .max(20, {
                 message: "Votre mot de passe doit faire 20 caractères maximum",
             })
-            .trim(),
+            .trim()
+            .regex(
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/,
+                {
+                    message:
+                        "Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial et doit faire 8 caractères minimum et 20 caractères maximum",
+                }
+            ),
         confirmation: z
             .string()
             .min(1, {
