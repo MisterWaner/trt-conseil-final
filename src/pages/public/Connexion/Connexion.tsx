@@ -9,7 +9,7 @@ import PublicWrapper from "../../../components/Wrapper/PublicWrapper";
 
 export default function Connexion() {
     const navigate = useNavigate();
-    const [role, setRole] = useState<string | number>("");
+    const [role, setRole] = useState("");
 
     const {
         register,
@@ -26,16 +26,16 @@ export default function Connexion() {
 
         //If token is user is already logged in, redirect to the right page
         if (storedToken) {
-            const storedRoleId: number = Number(Cookies.get("roleId"));
+            const storedRoleId = Cookies.get("roleId") as string;
             setRole(storedRoleId);
 
-            if (storedRoleId === 1) {
+            if (storedRoleId === "1") {
                 navigate("/admin");
-            } else if (storedRoleId === 2) {
+            } else if (storedRoleId === "2") {
                 navigate("/consultant");
-            } else if (storedRoleId === 3) {
+            } else if (storedRoleId === "3") {
                 navigate("/recruiter");
-            } else if (storedRoleId === 4) {
+            } else if (storedRoleId === "4") {
                 navigate("/candidat");
             }
         }
@@ -51,6 +51,7 @@ export default function Connexion() {
 
             if (response.status === 200) {
                 const { token, id, roleId, firstname, email } = response.data;
+                console.log(token, id, roleId, firstname, email);
 
                 Cookies.set("token", token, {
                     secure: true,
@@ -78,8 +79,6 @@ export default function Connexion() {
                     expires: 1,
                 });
 
-                setRole(roleId);
-
                 if (roleId === 1) {
                     navigate("/admin");
                 } else if (roleId === 2) {
@@ -99,13 +98,13 @@ export default function Connexion() {
     return (
         <>
             {
-                role === 1 ? (
+                role === "1" ? (
                     navigate("/admin")
-                ) : role === 2 ? (
+                ) : role === "2" ? (
                     navigate("/consultant")
-                ) : role === 3 ? (
+                ) : role === "3" ? (
                     navigate("/recruiter")
-                ) : role === 4 ? (
+                ) : role === "4" ? (
                     navigate("/candidat")
                 ) : (
                     ""
