@@ -5,6 +5,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 
+
 //Public Routes
 import Home from "./pages/public/Home/Home";
 import Offres from "./pages/public/Offres/Offres";
@@ -57,11 +58,12 @@ const router = createBrowserRouter(
                 <Route path="nos-offres" element={<Offres3 />} />
                 <Route path="candidatures" element={<Candidatures />} />
             </Route>
-            <Route path="/candidat" element={<CandidatLayout />} >
+            <Route path="/candidat" element={<CandidatLayout />}>
                 <Route index element={<Candidat />} />
                 <Route path="les-offres" element={<Offres4 />} />
                 <Route path="mes-candidatures" element={<Candidatures2 />} />
             </Route>
+            
         </>
     )
 );
@@ -70,6 +72,7 @@ function App() {
     return (
         <>
             <RouterProvider router={router} />
+            
         </>
     );
 }
