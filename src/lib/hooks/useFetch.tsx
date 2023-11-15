@@ -4,8 +4,6 @@ import { AxiosRequestConfig } from "axios";
 
 export default function useFetch(url: string, options?: AxiosRequestConfig) {
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error>();
 
     useEffect(() => {
         const fetchData = async () => {
