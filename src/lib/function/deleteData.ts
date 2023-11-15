@@ -1,12 +1,12 @@
 import Axios from "../axios";
 
-export const deleteData = async (url: string, id: string) => {
+export const deleteData = async ( id: string) => {
     try {
-        const response = await Axios.delete(`${url}/${id}`);
+        const response = await Axios.delete(`/consultants/${id}`);
         console.log(response.status);
         
         if (response.status === 200) {
-            console.log(response.data, "Les données ont bien été supprimées");
+            console.log(response, "Les données ont bien été supprimées");
             return true;
         } else {
             console.error(
@@ -19,6 +19,6 @@ export const deleteData = async (url: string, id: string) => {
         }
     } catch (error) {
         console.error("Une erreur est survenue", error);
-        throw error;
+        throw new Error("Les données n'ont pas pu être envoyées");
     }
 };
