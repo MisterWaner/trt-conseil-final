@@ -16,6 +16,19 @@ export interface Password {
     currentPassword?: string;
     newPassword?: string;
 }
+
+export interface Offer {
+    title?: string;
+    reference: string;
+    salary?: number;
+    place?: string;
+    shcedules?: string;
+    contractType?: string;
+    isApproved?: boolean;
+    publicationDate?: Date;
+    userId?: string;
+}
+
 export interface ApiUserResponse {
     results: User[];
 }

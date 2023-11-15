@@ -6,8 +6,6 @@ export default function handleLogout() {
         Cookies.remove("id");
         Cookies.remove("email");
         Cookies.remove("roleId");
-
-        window.location.href = "/";
     } catch (error) {
         console.error("Une erreur est survenue lors de la déconnexion", error);
     }

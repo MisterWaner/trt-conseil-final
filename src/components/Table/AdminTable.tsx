@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { FaTrashCan } from "react-icons/fa6";
-import { User } from "../../../lib/types/types";
-import Axios from "../../../lib/axios";
-import { SuccessModal } from "../../Modal/SuccessModal";
-import { FailedModal } from "../../Modal/FailedModal";
+import { User } from "../../lib/types/types";
+import Axios from "../../lib/axios";
+import { SuccessModal } from "../Modal/SuccessModal";
+import { FailedModal } from "../Modal/FailedModal";
 
 const AdminTable = () => {
     const [consultants, setConsultants] = useState<User[]>([]);

@@ -1,5 +1,5 @@
 import AuthWrapper from "../../../components/Wrapper/AuthWrapper";
-import AdminTable from "../../../components/Table/AdminTable/AdminTable";
+import AdminTable from "../../../components/Table/AdminTable";
 
 export default function Consultants() {
     return (

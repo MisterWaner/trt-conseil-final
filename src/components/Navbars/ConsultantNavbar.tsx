@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import handleLogout from "../../lib/function/handleLogout";
 
 const links: Array<{ label: string; href: string }> = [
     { label: "Accueil", href: "/consultant" },
     { label: "les candidats", href: "/consultant/candidats" },
     { label: "les offres", href: "/consultant/offres" },
-    { label: "Déconnexion", href: "/login" },
 ];
 
 export default function ConsultantNavbar() {
@@ -42,6 +42,11 @@ export default function ConsultantNavbar() {
                                 </Link>
                             </li>
                         ))}
+                        <li className="lg:mr-2 font-bold text-black hover:text-blue-500">
+                            <Link to="/" onClick={handleLogout}>
+                                <p className="p-2 capitalize">Déconnexion</p>
+                            </Link>
+                        </li>
                     </ul>
                 </div>
                 <button
