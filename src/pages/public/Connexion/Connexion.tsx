@@ -53,10 +53,9 @@ export default function Connexion() {
     const loginUser = async (data: unknown) => {
         try {
             const response = await Axios.post("auth/login", data);
-
+            
             if (response.status === 200) {
                 const { token, id, roleId, email, isApproved } = response.data;
-                console.log(token, id, roleId, email, isApproved);
 
                 if (isApproved === true) {
                     Cookies.set("token", token, {

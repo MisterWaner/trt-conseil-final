@@ -10,6 +10,12 @@ export interface User {
     isApproved?: boolean;
 }
 
+export interface Password {
+    password: string;
+    confirmation: string;
+    currentPassword?: string;
+    newPassword?: string;
+}
 export interface ApiUserResponse {
     results: User[];
 }

@@ -29,7 +29,7 @@ export default function Admin() {
     const onSubmit = async (data: unknown) => {
         try {
             const response = await Axios.post("/consultants", data);
-            // console.log(response);
+            console.log(response.data);
             if (response.status === 201) {
                 setModalContent({
                     message: "Consultant ajouté avec succès",
