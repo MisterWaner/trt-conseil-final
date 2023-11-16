@@ -15,7 +15,7 @@ export default function Admin() {
         formState: { errors },
     } = useForm<RegisterConsultantSchema>({
         resolver: zodResolver(RegisterConsultantSchema),
-        mode: "onTouched",
+        mode: "onSubmit",
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);

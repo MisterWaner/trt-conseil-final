@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaUserNinja } from "react-icons/fa6";
+import { User } from "../../lib/types/types";
+import Axios from "../../lib/axios";
+import Cookies from "js-cookie";
 import Modal from "../../components/Modal/Modal";
 import PersonalInfoForm from "../../components/Forms/PersonalInfoForm";
 import ModifyPasswordForm from "../../components/Forms/ModifyPasswordForm";
@@ -8,6 +11,35 @@ import AuthWrapper from "../../components/Wrapper/AuthWrapper";
 export default function Candidat() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
+    const [id, setId] = useState<string>("");
+    const [user, setUser] = useState<User>();
+
+    useEffect(() => {
+        const idCookie = Cookies.get("id");
+        if (idCookie) {
+            setId(idCookie);
+        }
+        async function getUser() {
+            try {
+                const response = await Axios.get(`/candidats/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (response.status === 200) {
+                    console.log(response.data);
+                } else {
+                    console.error(response, "Une erreur est survenue");
+                }
+                setUser(response.data);
+                
+            } catch (error) {
+                console.error(error, "Une erreur est survenue");
+            }
+        }
+        getUser();
+    }, [id]);
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
@@ -20,11 +52,13 @@ export default function Candidat() {
 
     const renderForm = () => {
         if (activeForm === "personalInfo") {
-            return <PersonalInfoForm />;
+            return <PersonalInfoForm id={id} />;
         } else if (activeForm === "modifyPassword") {
-            return <ModifyPasswordForm/>;
+            return <ModifyPasswordForm id={id} />;
         }
     };
+
+
 
     return (
         <AuthWrapper>
@@ -47,10 +81,10 @@ export default function Candidat() {
                         </div>
                         <div className="flex flex-col w-[200px] items-center justify-center mt-5 md:w-[300px]">
                             <p className="font-medium text-xl md:text-2xl">
-                                Nom Prénom
+                                {user?.firstname} {user?.lastname}
                             </p>
                             <p className="font-medium text-xl md:text-2xl">
-                                Adresse email
+                                {user?.email}
                             </p>
                         </div>
                     </article>

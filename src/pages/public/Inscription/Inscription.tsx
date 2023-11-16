@@ -17,7 +17,7 @@ export default function Inscription() {
         formState: { errors },
     } = useForm<RegisterSchema>({
         resolver: zodResolver(RegisterSchema),
-        mode: "onTouched",
+        mode: "onSubmit",
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);

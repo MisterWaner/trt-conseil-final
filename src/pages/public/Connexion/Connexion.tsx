@@ -25,7 +25,7 @@ export default function Connexion() {
         formState: { errors },
     } = useForm<LoginUserSchema>({
         resolver: zodResolver(LoginUserSchema),
-        mode: "onTouched",
+        mode: "onSubmit",
     });
 
     //Check if user is already logged in

@@ -22,7 +22,7 @@ export default function Consultant() {
         formState: { errors },
     } = useForm<UpdatePasswordSchema>({
         resolver: zodResolver(UpdatePasswordSchema),
-        mode: "onTouched",
+        mode: "onSubmit",
     });
 
     useEffect(() => {
