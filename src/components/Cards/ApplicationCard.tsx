@@ -4,25 +4,42 @@ import {
     FaEye,
     FaEyeSlash,
 } from "react-icons/fa6";
+import { Application } from "../../lib/types/types";
 
-export default function ApplicationCard() {
+interface ApplicationCardProps {
+    application: Application;
+    deleteApplication: (id: string) => void;
+}
+
+export default function ApplicationCard({ application, deleteApplication }: ApplicationCardProps) {
+
+    const date = application.applicationDate.toLocaleString().split("T")[0];
+    const reverseDate = date.split("-").reverse().join("-");
+
     return (
         <div className="bg-sky-200 w-[250px] md:w-[300px] p-6 rounded-md border-2 border-stone-300 transition duration-200 hover:scale-[1.05]">
             <div className="flex flex-col">
                 <div className="flex flex-col mb-2">
-                    <h5 className="font-semibold">Titre</h5>
+                    <h5 className="font-semibold">
+                        {
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            application.offer.title
+                        }
+                    </h5>
+                    <p className="font-semibold my-4 italic">{application.offer.user.societyName }</p>
                     <p className="text-sky-300 font-semibold italic">
-                        Référence
+                        {application.offer.place}
                     </p>
                 </div>
-                <div className="text-sm mb-3">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Voluptates consequuntur ipsa magnam, numquam ducimus commodi
-                    repellat suscipit nam pariatur distinctio quidem dolor
-                    quaerat ea amet?
+                <div className="text-md mb-3">
+                    {application.offer.salary} €/mois
+                </div>
+                <div className="text-md mb-3">
+                    Postulé le : {reverseDate} 
                 </div>
                 <div className="flex flex-col mb-2 w-full">
-                    <button className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
+                    <button onClick={() => deleteApplication(application.id)} className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
                         Annuler
                     </button>
                     <button className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">

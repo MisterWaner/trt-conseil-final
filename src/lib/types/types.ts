@@ -22,11 +22,18 @@ export interface Offer {
     reference: string;
     salary?: number;
     place?: string;
-    shcedules?: string;
+    schedules?: string;
     contractType?: string;
     isApproved?: boolean;
     publicationDate?: Date;
-    userId?: string;
+    userId: string;
+}
+
+export interface Application {
+    id: string;
+    offerId: string;
+    userId: string;
+    applicationDate: Date;
 }
 
 export interface ApiUserResponse {
