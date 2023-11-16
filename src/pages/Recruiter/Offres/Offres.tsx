@@ -1,95 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthWrapper from "../../../components/Wrapper/AuthWrapper";
-import Table from "../../../components/Table/Table";
+import { OffersMadeInTable } from "../../../components/Table/TablesInRecruiter";
 import Modal from "../../../components/Modal/Modal";
 import AddOfferForm from "../../../components/Forms/AddOfferForm";
-
-const dataFromBackend = [
-    {
-        id: 1,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 2,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 3,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 4,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 5,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 6,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 7,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-    {
-        id: 8,
-        title: "Jean",
-        reference: "Dupont",
-        place: "Paris",
-        contractType: "CDI",
-        publicationDate: "01/01/2021",
-        isApproved: true,
-    },
-];
-
-const columnsToShow = [
-    "id",
-    "title",
-    "place",
-    "contractType",
-    "publicationDate",
-];
+import Cookies from "js-cookie";
 
 export default function Offres() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
+    const [id, setId] = useState<string>("");
+
+    useEffect(() => {
+        const idCookie = Cookies.get("id");
+        if (idCookie) {
+            setId(idCookie);
+        }
+    }, []);
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
@@ -102,21 +28,9 @@ export default function Offres() {
 
     const renderForm = () => {
         if (activeForm === "addOffer") {
-            return <AddOfferForm />;
+            return <AddOfferForm id={id} />;
         }
     };
-
-    const filteredData: Record<string, number>[] = dataFromBackend.map(
-        (row) => {
-            const filteredRow: Record<string, number> = {};
-            columnsToShow.forEach((column) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                filteredRow[column] = row[column];
-            });
-            return filteredRow;
-        }
-    );
 
     return (
         <AuthWrapper>
@@ -125,11 +39,7 @@ export default function Offres() {
                     Nos Offres
                 </h1>
                 <section className="mt-9 overflow-x-auto">
-                    <Table
-                        data={filteredData}
-                        columsToShow={columnsToShow}
-                        subject=""
-                    />
+                    <OffersMadeInTable id={id} />
                 </section>
                 <section className="mt-5">
                     <button
@@ -140,8 +50,11 @@ export default function Offres() {
                     </button>
                 </section>
             </div>
-            <Modal isOpen={isModalOpen} onClose={closeModal} content={renderForm()} />
-                 
+            <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                content={renderForm()}
+            />
         </AuthWrapper>
     );
 }

@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaUserTie } from "react-icons/fa6";
-
+import { User } from "../../lib/types/types";
+import Axios from "../../lib/axios";
+import Cookies from "js-cookie";
 import AuthWrapper from "../../components/Wrapper/AuthWrapper";
 import Modal from "../../components/Modal/Modal";
 import RecruiterInfoForm from "../../components/Forms/RecruiterInfoForm";
@@ -9,6 +11,35 @@ import ModifyPasswordForm from "../../components/Forms/ModifyPasswordForm";
 export default function Recruiter() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
+    const [id, setId] = useState<string>("");
+    const [user, setUser] = useState<User>();
+
+    useEffect(() => {
+        const idCookie = Cookies.get("id");
+        if (idCookie) {
+            setId(idCookie);
+        }
+        async function getUser() {
+            try {
+                const response = await Axios.get(`/recruiters/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (response.status === 200) {
+                    console.log(response.data);
+                } else {
+                    console.error(response, "Une erreur est survenue");
+                }
+                setUser(response.data);
+                
+            } catch (error) {
+                console.error(error, "Une erreur est survenue");
+            }
+        }
+        getUser();
+    }, [id]);
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
@@ -21,9 +52,9 @@ export default function Recruiter() {
 
     const renderForm = () => {
         if (activeForm === "recruiterInfo") {
-            return <RecruiterInfoForm />;
+            return <RecruiterInfoForm id={id} />;
         } else if (activeForm === "modifyPassword") {
-            return <ModifyPasswordForm />;
+            return <ModifyPasswordForm id={id} />;
         }
     };
 
@@ -48,13 +79,13 @@ export default function Recruiter() {
                         </div>
                         <div className="flex flex-col w-[200px] items-center justify-center mt-5 md:w-[300px]">
                             <p className="font-medium text-xl md:text-2xl">
-                                Nom Prénom
+                                {user?.firstname ? user.firstname : "Prénom"} {user?.lastname ? user.lastname : "Nom"}
                             </p>
                             <p className="font-medium text-xl md:text-2xl">
-                                Entreprise
+                                {user?.email ? user.email : "Email"}
                             </p>
                             <p className="font-medium text-xl md:text-2xl">
-                                Adresse email
+                                {user?.societyName ? user.societyName : "Nom de la société"}
                             </p>
                         </div>
                     </article>
