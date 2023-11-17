@@ -11,17 +11,24 @@ import ModifyPasswordForm from "../../components/Forms/ModifyPasswordForm";
 export default function Recruiter() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
-    const [id, setId] = useState<string>("");
+    const [cookies, setCookies] = useState({
+        id: "",
+        email: "",
+    });
     const [user, setUser] = useState<User>();
 
     useEffect(() => {
         const idCookie = Cookies.get("id");
-        if (idCookie) {
-            setId(idCookie);
+        const emailCookie = Cookies.get("email");
+        if (idCookie || emailCookie) {
+            setCookies({
+                id: idCookie ? idCookie : "",
+                email: emailCookie ? emailCookie : "",
+            });
         }
         async function getUser() {
             try {
-                const response = await Axios.get(`/recruiters/${id}`, {
+                const response = await Axios.get(`/recruiters/${cookies.id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                         "Content-Type": "application/json",
@@ -39,7 +46,7 @@ export default function Recruiter() {
             }
         }
         getUser();
-    }, [id]);
+    }, [cookies.id]);
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
@@ -52,9 +59,9 @@ export default function Recruiter() {
 
     const renderForm = () => {
         if (activeForm === "recruiterInfo") {
-            return <RecruiterInfoForm id={id} />;
+            return <RecruiterInfoForm id={cookies.id} />;
         } else if (activeForm === "modifyPassword") {
-            return <ModifyPasswordForm id={id} />;
+            return <ModifyPasswordForm id={cookies.id} />;
         }
     };
 
@@ -82,7 +89,7 @@ export default function Recruiter() {
                                 {user?.firstname ? user.firstname : "Prénom"} {user?.lastname ? user.lastname : "Nom"}
                             </p>
                             <p className="font-medium text-xl md:text-2xl">
-                                {user?.email ? user.email : "Email"}
+                                {cookies.email ? cookies.email : "Email"}
                             </p>
                             <p className="font-medium text-xl md:text-2xl">
                                 {user?.societyName ? user.societyName : "Nom de la société"}

@@ -36,12 +36,12 @@ export default function Offres() {
         }
     }, []);
 
-    const applyToOffer = async (offerReference: string) => {
+    const applyToOffer = async (id: string) => {
         try {
             const response = await Axios.post(
                 "/applications",
                 {
-                    offerId: offerReference,
+                    offerId: id,
                     userId: candidatId,
                 },
                 {
@@ -84,7 +84,11 @@ export default function Offres() {
                 <section className="mt-10 w-full mx-auto mb-5">
                     <article className="mt-10 flex flex-wrap gap-5 justify-center sm:justify-between md:justify-start">
                         {offers.map((offer) => (
-                            <OfferCard offer={offer} key={offer.reference} applyToOffer={applyToOffer} />
+                            <OfferCard
+                                offer={offer}
+                                key={offer.id}
+                                applyToOffer={applyToOffer}
+                            />
                         ))}
                     </article>
                 </section>

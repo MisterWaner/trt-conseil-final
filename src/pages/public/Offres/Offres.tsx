@@ -1,9 +1,15 @@
 import { OfferCard } from "../../../components/Cards/OfferCard";
 import Axios from "../../../lib/axios";
 import { useEffect, useState } from "react";
+import { FailedModal } from "../../../components/Modal/FailedModal";
+import { Offer } from "../../../lib/types/types";
 
 export default function Offres() {
-    const [offers, setOffers] = useState([]);
+    const [offers, setOffers] = useState<Offer[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [message, setMessage] = useState("");
+    const [isFailed, setIsFailed] = useState(true);
+
 
     const fetchOffers = async () => {
         try {
@@ -22,6 +28,12 @@ export default function Offres() {
     useEffect(() => {
         fetchOffers();
     }, []);
+
+    const applyToOffer = () => {
+        setIsFailed(false);
+        setMessage("Vous ne pouvez pas postuler sans être connecté ou inscrit");
+        setIsModalOpen(true);
+    }
 
     return (
         <div className="flex flex-col min-h-screen bg-zinc-100">
@@ -50,11 +62,20 @@ export default function Offres() {
                     </article>
                     <article className="mt-10 flex flex-wrap gap-5 justify-center sm:justify-between md:justify-start">
                         {offers.map((offer) => (
-                            <OfferCard offer={offer} key={offer} />
+                            <OfferCard offer={offer} key={offer.id} applyToOffer={applyToOffer} />
                         ))}
                     </article>
                 </section>
             </main>
+            {isFailed === false ? (
+                <FailedModal
+                    content={message}
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            ) : (
+                ""
+            )}
         </div>
     );
 }

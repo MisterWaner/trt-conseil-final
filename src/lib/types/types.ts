@@ -19,6 +19,7 @@ export interface Password {
 
 export interface Offer {
     title?: string;
+    id: string;
     reference: string;
     salary?: number;
     place?: string;

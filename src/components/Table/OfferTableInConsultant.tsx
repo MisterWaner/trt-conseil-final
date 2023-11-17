@@ -104,7 +104,7 @@ export function OffersToApproveTable() {
                                     <div className="flex justify-around items-center">
                                         <button
                                             onClick={() =>
-                                                approveOffer(offer.reference)
+                                                approveOffer(offer.id)
                                             }
                                         >
                                             <FaCheck className="text-lime-500 hover:text-lime-800 cursor-pointer w-5 h-5" />

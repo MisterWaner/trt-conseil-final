@@ -11,11 +11,13 @@ export default function Offres() {
     const [id, setId] = useState<string>("");
 
     useEffect(() => {
-        const idCookie = Cookies.get("id");
+        const idCookie = Cookies.get("id") as string;
         if (idCookie) {
             setId(idCookie);
         }
     }, []);
+
+    
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
@@ -28,7 +30,7 @@ export default function Offres() {
 
     const renderForm = () => {
         if (activeForm === "addOffer") {
-            return <AddOfferForm id={id} />;
+            return <AddOfferForm id={id}  />;
         }
     };
 

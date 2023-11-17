@@ -3,7 +3,7 @@ import { Offer } from "../../lib/types/types";
 
 interface OfferCardProps {
     offer: Offer;
-    applyToOffer: (offerReference: string) => void;
+    applyToOffer: (id: string) => void;
 }
 
 export const OfferCard = ({offer, applyToOffer} : OfferCardProps) => {
@@ -28,7 +28,7 @@ export const OfferCard = ({offer, applyToOffer} : OfferCardProps) => {
                     obcaecati!
                 </div>
                 <div className="flex flex-col mb-2 w-full">
-                    <button onClick={() => applyToOffer(offer.reference)} className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
+                    <button onClick={() => applyToOffer(offer.id)} className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
                         Postuler
                     </button>
                     <button className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">

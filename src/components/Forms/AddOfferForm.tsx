@@ -1,23 +1,25 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 import { FailedModal } from "../../components/Modal/FailedModal";
-import Axios from "../../lib/axios";
+import { postOffer } from "../../lib/services/postDatas";
 import { OfferSchema } from "../../lib/Validations/offer.schema";
 import { useState } from "react";
 
-export default function AddOfferForm({id}: {id: string}) {
+
+export default function AddOfferForm({ id }: { id: string }) {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [offer, setOffer] = useState<OfferSchema>({
-        title: "",
-        place: "",
-        salary: 0,
-        contractType: "",
-        schedules: "",
-        userId: id,
-    });
+
+    const userId: string = id;
+    console.log(userId);
+    if (!userId || typeof userId !== 'string') {
+        // Handle error: User ID is required and must be a string
+        console.log("BOOOOOO !");
+    }
 
     const {
         register,
@@ -29,40 +31,32 @@ export default function AddOfferForm({id}: {id: string}) {
         mode: "onSubmit",
     });
 
-    const addOffer = async () => {
+    const onInvalid = (errors: unknown) => console.error(errors);
+
+    const onSubmit = async (data: any, event: { target: HTMLFormElement | undefined; }) => {
         try {
-            setOffer(offer);
-            const response = await Axios.post("/offers", offer, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    "Content-Type": "application/json",
-                },
-            });
-            if (response.status === 201) {
-                setIsSuccess(true);
-                setMessage("L'offre à bien été ajoutée");
-                setIsModalOpen(true);
-                reset();
-            } else {
-                setIsSuccess(false);
-                setMessage("Une erreur est survenue, veuillez réessayer");
-                setIsModalOpen(true);
-                reset();
-                console.log(
-                    "Une erreur est survenue lors de la mise à jour du mot de passe",
-                    response.status,
-                    response.statusText
-                );
-            }
+
+            const postOfferData = new FormData(event.target);
+            
+            const response = await postOffer(postOfferData, userId);
+            console.log(response.data);
+            onInvalid(errors)
+            setIsSuccess(true);
+            setMessage("L'offre a bien été envoyée");
+            setIsModalOpen(true);
+            reset();
+            console.log(data)
+            
         } catch (error) {
-            console.error(error, "Une erreur est survenue");
+            console.error("Erreur d'envoi des données au back", error);
         }
     };
 
     return (
         <>
             <form
-                onSubmit={handleSubmit(addOffer)}
+                // @ts-ignore
+                onSubmit={handleSubmit((data, event) => onSubmit(data, event), onInvalid)}
                 className="flex flex-col w-full items-center"
             >
                 <div className="flex flex-col mb-4 w-4/6">
