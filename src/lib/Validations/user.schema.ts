@@ -1,7 +1,6 @@
 import { z } from "zod";
 
-export const RegisterSchema = z
-    .object({
+export const RegisterSchema = z.object({
         email: z
             .string()
             .min(1, { message: "Veuillez renseigner votre adresse email" })
@@ -94,31 +93,7 @@ export const LoginUserSchema = z.object({
         ),
 });
 
-export const UserSchema = z.object({
-    id: z.string().min(1, { message: "Veuillez renseigner votre id" }),
-    roleId: z.number().min(1, { message: "Veuillez renseigner votre rôle" }),
-    email: z
-        .string()
-        .min(1, { message: "Veuillez renseigner votre adresse email" })
-        .email({ message: "Votre adresse email est invalide" })
-        .toLowerCase()
-        .trim(),
-    password: z
-        .string()
-        .min(1, {
-            message: "Veuillez renseigner votre mot de passe",
-        })
-        .max(20, {
-            message: "Votre mot de passe doit faire 20 caractères maximum",
-        })
-        .regex(
-            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/,
-            {
-                message:
-                    "Votre mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial et doit faire 8 caractères minimum et 20 caractères maximum",
-            }
-        )
-        .trim(),
+export const CandidatSchema = z.object({
     firstname: z
         .string()
         .min(2, {
@@ -128,6 +103,34 @@ export const UserSchema = z.object({
             message: "Votre prénom doit contenir au maximum 50 caractères",
         })
         .trim(),
+    lastname: z
+        .string()
+        .min(2, {
+            message: "Votre nom doit contenir au minimum 2 caractères",
+        })
+        .max(50, {
+            message: "Votre nom doit contenir au maximum 50 caractères",
+        }),
+});
+
+export const UserSchema = z.object({
+    email: z
+        .string()
+        .min(1, { message: "Veuillez renseigner votre adresse email" })
+        .email({ message: "Votre adresse email est invalide" })
+        .toLowerCase()
+        .trim()
+        .optional(),
+    firstname: z
+        .string()
+        .min(2, {
+            message: "Votre prénom doit contenir au minimum 2 caractères",
+        })
+        .max(50, {
+            message: "Votre prénom doit contenir au maximum 50 caractères",
+        })
+        .trim()
+        ,
     lastname: z
         .string()
         .min(2, {
@@ -156,11 +159,9 @@ export const UserSchema = z.object({
             message: "Votre adresse doit contenir au maximum 100 caractères",
         })
         .trim(),
-    isApproved: z.boolean(),
 });
 
-export const UpdatePasswordSchema = z
-    .object({
+export const UpdatePasswordSchema = z.object({
         currentPassword: z
             .string()
             .min(1, {
@@ -218,5 +219,6 @@ export const UpdatePasswordSchema = z
 export type RegisterSchema = z.infer<typeof RegisterSchema>;
 export type LoginUserSchema = z.infer<typeof LoginUserSchema>;
 export type UserSchema = z.infer<typeof UserSchema>;
+export type CandidatSchema = z.infer<typeof CandidatSchema>;
 export type UpdatePasswordSchema = z.infer<typeof UpdatePasswordSchema>;
 export type RegisterConsultantSchema = z.infer<typeof RegisterConsultantSchema>;

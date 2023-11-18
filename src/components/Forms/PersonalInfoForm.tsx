@@ -1,59 +1,68 @@
-import { UserSchema } from "../../lib/Validations/user.schema";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { CandidatSchema } from "../../lib/Validations/user.schema";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 import { FailedModal } from "../../components/Modal/FailedModal";
-import Axios from "../../lib/axios";
+import { updateCandidateDatas } from "../../lib/services/updateDatas";
 
-export default function PersonalInfoForm({ id }: { id: string }) {
+export default function PersonalInfoForm({
+    id,
+    closeModal,
+}: {
+    id: string;
+    closeModal: () => void;
+}) {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const userId: string = id;
 
     const {
         register,
         reset,
         handleSubmit,
         formState: { errors },
-    } = useForm<UserSchema>({
-        resolver: zodResolver(UserSchema),
+    } = useForm<CandidatSchema>({
+        resolver: zodResolver(CandidatSchema),
         mode: "onSubmit",
     });
 
-    const updatePersonalInfo = async (data: UserSchema) => {
+    const onInvalid = (errors: unknown) => console.error(errors);
+
+    const updatePersonalInfo = async (data: any) => {
+        const response = await updateCandidateDatas(data, userId);
         try {
-            const response = await Axios.put(`/candidats/${id}`, data, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    "Content-Type": "application/json",
-                },
-            });
+            onInvalid(errors);
             if (response.status === 200) {
                 setIsSuccess(true);
                 setMessage("Les informations ont bien été modifiées");
-                setIsModalOpen(true);
-                reset();
             } else {
                 setIsSuccess(false);
                 setMessage("Une erreur est survenue, veuillez réessayer");
-                setIsModalOpen(true);
-                reset();
                 console.log(
                     "Une erreur est survenue lors de la mise à jour du mot de passe",
-                    response.status,
-                    response.statusText
+                    response.status
                 );
             }
         } catch (error) {
             console.error(error, "Une erreur est survenue");
+            setIsSuccess(false);
+            setMessage(`Une erreur est survenue : ${response.data.message}`);
         }
+        setIsModalOpen(true);
+        setTimeout(() => {
+            setIsModalOpen(false);
+            reset();
+            closeModal();
+        }, 3000)
     };
 
     return (
         <>
             <form
-                onSubmit={handleSubmit(updatePersonalInfo)}
+                onSubmit={handleSubmit(updatePersonalInfo, onInvalid)}
                 className="flex flex-col w-full items-center"
             >
                 <div className="flex flex-col mb-4 w-4/6">

@@ -1,15 +1,19 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import handleLogout from "../../lib/function/handleLogout";
 
-const links: Array<{ label: string; href: string }> = [
-    { label: "Accueil", href: "/admin" },
-    { label: "Les consultants", href: "/admin/consultants" },
-];
 
 export default function AdminNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { id } = useParams<{ id: string }>();
+
+
+    const links: Array<{ label: string; href: string }> = [
+        { label: "Accueil", href: `/admin/${id}` },
+        { label: "Les consultants", href: `/admin/${id}/consultants` },
+    ];
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);

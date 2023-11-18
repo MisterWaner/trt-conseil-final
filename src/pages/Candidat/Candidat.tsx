@@ -52,9 +52,9 @@ export default function Candidat() {
 
     const renderForm = () => {
         if (activeForm === "personalInfo") {
-            return <PersonalInfoForm id={id} />;
+            return <PersonalInfoForm id={id} closeModal={closeModal} />;
         } else if (activeForm === "modifyPassword") {
-            return <ModifyPasswordForm id={id} />;
+            return <ModifyPasswordForm id={id} closeModal={closeModal} />;
         }
     };
 

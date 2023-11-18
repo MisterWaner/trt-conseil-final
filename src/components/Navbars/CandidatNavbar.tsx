@@ -1,15 +1,20 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import handleLogout from "../../lib/function/handleLogout";
 
-const links: Array<{ label: string; href: string }> = [
-    { label: "Accueil", href: "/candidat" },
-    { label: "Les offres", href: "/candidat/les-offres" },
-    { label: "Mes candidatures", href: "/candidat/mes-candidatures" },
-];
+
+
 export default function CandidatNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { id } = useParams<{ id: string }>();
+
+    const links: Array<{ label: string; href: string }> = [
+        { label: "Accueil", href: `/candidat/${id}` },
+        { label: "Les offres", href: `/candidat/${id}/les-offres` },
+        { label: "Mes candidatures", href: `/candidat/${id}/mes-candidatures`},
+    ]
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);

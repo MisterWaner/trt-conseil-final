@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaUserTie } from "react-icons/fa6";
 import { User } from "../../lib/types/types";
+import { useParams } from "react-router-dom";
 import Axios from "../../lib/axios";
 import Cookies from "js-cookie";
 import AuthWrapper from "../../components/Wrapper/AuthWrapper";
@@ -9,13 +10,15 @@ import RecruiterInfoForm from "../../components/Forms/RecruiterInfoForm";
 import ModifyPasswordForm from "../../components/Forms/ModifyPasswordForm";
 
 export default function Recruiter() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModal, setIsModal] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
     const [cookies, setCookies] = useState({
         id: "",
         email: "",
     });
     const [user, setUser] = useState<User>();
+
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         const idCookie = Cookies.get("id");
@@ -28,7 +31,7 @@ export default function Recruiter() {
         }
         async function getUser() {
             try {
-                const response = await Axios.get(`/recruiters/${cookies.id}`, {
+                const response = await Axios.get(`/recruiters/${id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                         "Content-Type": "application/json",
@@ -46,22 +49,22 @@ export default function Recruiter() {
             }
         }
         getUser();
-    }, [cookies.id]);
+    }, [id]);
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
-        setIsModalOpen(true);
+        setIsModal(true);
     };
 
     const closeModal = () => {
-        setIsModalOpen(false);
+        setIsModal(false);
     };
 
     const renderForm = () => {
         if (activeForm === "recruiterInfo") {
-            return <RecruiterInfoForm id={cookies.id} />;
+            return <RecruiterInfoForm id={cookies.id} closeModal={closeModal}/>;
         } else if (activeForm === "modifyPassword") {
-            return <ModifyPasswordForm id={cookies.id} />;
+            return <ModifyPasswordForm id={cookies.id} closeModal={closeModal}/>;
         }
     };
 
@@ -128,7 +131,7 @@ export default function Recruiter() {
                 </section>
             </div>
             <Modal
-                isOpen={isModalOpen}
+                isOpen={isModal}
                 onClose={closeModal}
                 content={renderForm()}
             />

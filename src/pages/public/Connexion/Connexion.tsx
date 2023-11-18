@@ -7,10 +7,13 @@ import Axios from "../../../lib/axios";
 import Cookies from "js-cookie";
 import { LoginUserSchema } from "../../../lib/Validations/user.schema";
 import PublicWrapper from "../../../components/Wrapper/PublicWrapper";
+import { getCookieUserId } from "../../../lib/function/getCookieUserId";
 
 export default function Connexion() {
     const navigate = useNavigate();
     const [role, setRole] = useState("");
+    const [userId, setUserId] = useState("");
+    
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -31,23 +34,31 @@ export default function Connexion() {
     //Check if user is already logged in
     useEffect(() => {
         const storedToken = Cookies.get("token");
+        const fetchUserId = async () => {
+            const retrievedUserId = getCookieUserId() as string;
+            setUserId(retrievedUserId);
+        }
 
+        fetchUserId();
         //If token is user is already logged in, redirect to the right page
         if (storedToken) {
             const storedRoleId = Cookies.get("roleId") as string;
             setRole(storedRoleId);
 
-            if (storedRoleId === "1") {
-                navigate("/admin");
+            if (userId) {
+                if (storedRoleId === "1") {
+                navigate(`/admin/${userId}`);
             } else if (storedRoleId === "2") {
-                navigate("/consultant");
+                navigate(`/consultant/${userId}`);
             } else if (storedRoleId === "3") {
-                navigate("/recruiter");
+                navigate(`/recruiter/${userId}`);
             } else if (storedRoleId === "4") {
-                navigate("/candidat");
+                navigate(`/candidat/${userId}`);
             }
+            }
+            
         }
-    }, [navigate]);
+    }, [navigate, userId]);
 
     //Handle form submit
     const loginUser = async (data: unknown) => {
@@ -80,13 +91,13 @@ export default function Connexion() {
                     });
 
                     if (roleId === 1) {
-                        navigate("/admin");
+                        navigate(`/admin/${id}`);
                     } else if (roleId === 2) {
-                        navigate("/consultant");
+                        navigate(`/consultant/${id}`);
                     } else if (roleId === 3) {
-                        navigate("/recruiter");
+                        navigate(`/recruiter/${id}`);
                     } else if (roleId === 4) {
-                        navigate("/candidat");
+                        navigate(`/candidat/${id}`);
                     }
                 } else {
                     setModalContent({

@@ -1,16 +1,20 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import handleLogout from "../../lib/function/handleLogout";
 
-const links: Array<{ label: string; href: string }> = [
-    { label: "Accueil", href: "/consultant" },
-    { label: "les candidats", href: "/consultant/candidats" },
-    { label: "les offres", href: "/consultant/offres" },
-];
 
 export default function ConsultantNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { id } = useParams<{ id: string }>();
+
+    const links: Array<{ label: string; href: string }> = [
+        { label: "Accueil", href: `/consultant/${id}` },
+        { label: "les candidats", href: `/consultant/${id}/candidats` },
+        { label: "les offres", href: `/consultant/${id}/offres` },
+    ];
+    
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);

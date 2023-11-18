@@ -8,18 +8,11 @@ import { postOffer } from "../../lib/services/postDatas";
 import { OfferSchema } from "../../lib/Validations/offer.schema";
 import { useState } from "react";
 
-
-export default function AddOfferForm({ id }: { id: string }) {
+export default function AddOfferForm({id, closeModal}: {id: string, closeModal: () => void}) {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const userId: string = id;
-    console.log(userId);
-    if (!userId || typeof userId !== 'string') {
-        // Handle error: User ID is required and must be a string
-        console.log("BOOOOOO !");
-    }
 
     const {
         register,
@@ -31,34 +24,41 @@ export default function AddOfferForm({ id }: { id: string }) {
         mode: "onSubmit",
     });
 
-    const onInvalid = (errors: unknown) => console.error(errors);
-
-    const onSubmit = async (data: any, event: { target: HTMLFormElement | undefined; }) => {
+    const onSubmit = async (data: any) => {
         try {
+            const response = await postOffer(data, userId);
 
-            const postOfferData = new FormData(event.target);
-            
-            const response = await postOffer(postOfferData, userId);
-            console.log(response.data);
-            onInvalid(errors)
-            setIsSuccess(true);
-            setMessage("L'offre a bien été envoyée");
-            setIsModalOpen(true);
-            reset();
-            console.log(data)
-            
+            if (response.status === 201) {
+                console.log(response.data);
+                setIsSuccess(true);
+                setMessage("L'offre a bien été envoyée");
+            } else {
+                setIsSuccess(false);
+                setMessage("Cette offre existe déjà");
+            }
+
+            console.log(data);
         } catch (error) {
             console.error("Erreur d'envoi des données au back", error);
+            setIsSuccess(false);
+            setMessage("Une erreur est survenue, réessayer plus tard");
         }
+        setIsModalOpen(true);
+        setTimeout(() => {
+            setIsModalOpen(false);
+            reset();
+            closeModal();
+        }, 3000)
     };
 
     return (
         <>
             <form
                 // @ts-ignore
-                onSubmit={handleSubmit((data, event) => onSubmit(data, event), onInvalid)}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col w-full items-center"
             >
+                {/* <input type="hidden" name="userId" value={userId} /> */}
                 <div className="flex flex-col mb-4 w-4/6">
                     <label htmlFor="title">Intitulé</label>
                     <input

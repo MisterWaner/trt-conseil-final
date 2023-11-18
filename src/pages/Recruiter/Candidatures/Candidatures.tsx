@@ -1,16 +1,17 @@
 import AuthWrapper from "../../../components/Wrapper/AuthWrapper";
 import {ApplicationsMadeTable} from "../../../components/Table/TablesInRecruiter";
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import { getCookieUserId } from "../../../lib/function/getCookieUserId";
 
 export default function Candidatures() {
     const [id, setId] = useState("");
 
     useEffect(() => {
-        const idCookie = Cookies.get("id");
-        if (idCookie) {
-            setId(idCookie);
+        const fetchUserId = async () => {
+            const retrievedUserId = getCookieUserId() as string;
+            setId(retrievedUserId);
         }
+        fetchUserId();
     }, []);
 
 

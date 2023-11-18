@@ -5,29 +5,41 @@ import Axios from "../../lib/axios";
 
 export function OffersMadeInTable({ id }: { id: string }) {
     const [offers, setOffers] = useState<Offer[]>([]);
+    const userId = id;
 
     //Get data from API
     useEffect(() => {
         const getOffers = async () => {
             try {
-                const response = await Axios.get(`/recruiters/${id}/offers`);
+                const response = await Axios.get(
+                    `/recruiters/${userId}/offers`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem(
+                                "token"
+                            )}`,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
                 if (response.status === 200) {
                     console.log(response.data);
+                    setOffers(response.data);
                 } else {
+                    console.log(response.status);
                     console.error(response, "Une erreur est survenue");
                 }
-                setOffers(response.data);
             } catch (error) {
                 console.error(error, "Une erreur est survenue");
             }
         };
         getOffers();
-    }, [id]);
+    }, [userId]);
 
     //Delete offer
-    const deleteOffer = async (reference: string) => {
+    const handleDelete = async (id: string) => {
         try {
-            const response = await Axios.delete(`/offers/${reference}`, {
+            const response = await Axios.delete(`/offers/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                     "Content-Type": "application/json",
@@ -35,9 +47,7 @@ export function OffersMadeInTable({ id }: { id: string }) {
             });
             if (response.status === 200) {
                 console.log(response.data);
-                setOffers(
-                    offers.filter((offer) => offer.reference !== reference)
-                );
+                setOffers(offers.filter((offer) => offer.id !== id));
             } else {
                 console.error(response, "Une erreur est survenue");
             }
@@ -103,7 +113,7 @@ export function OffersMadeInTable({ id }: { id: string }) {
                                     <div className="flex justify-around items-center">
                                         <button
                                             onClick={() =>
-                                                deleteOffer(offer.reference)
+                                                handleDelete(offer.id)
                                             }
                                         >
                                             <FaTrashCan className="text-red-500 hover:text-red-800 cursor-pointer w-5 h-5" />
@@ -128,12 +138,15 @@ export function OffersMadeInTable({ id }: { id: string }) {
 }
 export function ApplicationsMadeTable({ id }: { id: string }) {
     const [applications, setApplications] = useState<Application[]>([]);
+    const userId = id;
 
     //Get data from API
     useEffect(() => {
         const getApplications = async () => {
             try {
-                const response = await Axios.get(`/recruiters/${id}/applications`);
+                const response = await Axios.get(
+                    `/recruiters/${userId}/applications`
+                );
                 if (response.status === 200) {
                     console.log(response.data);
                 } else {
@@ -145,7 +158,7 @@ export function ApplicationsMadeTable({ id }: { id: string }) {
             }
         };
         getApplications();
-    }, [id]);
+    }, [userId]);
 
     //Delete offer
     const deleteApplication = async (id: string) => {
@@ -202,15 +215,25 @@ export function ApplicationsMadeTable({ id }: { id: string }) {
                                 className="text-center hover:bg-slate-200"
                             >
                                 <td className="py-2 px-4">{application.id}</td>
-                                <td className="py-2 px-4">{application.user.lastname}</td>
-                                <td className="py-2 px-4">{application.user.firstname}</td>
-                                <td className="py-2 px-4">{application.user.email}</td>
-                                <td className="py-2 px-4">{application.offer.title}</td>
+                                <td className="py-2 px-4">
+                                    {application.user.lastname}
+                                </td>
+                                <td className="py-2 px-4">
+                                    {application.user.firstname}
+                                </td>
+                                <td className="py-2 px-4">
+                                    {application.user.email}
+                                </td>
+                                <td className="py-2 px-4">
+                                    {application.offer.title}
+                                </td>
                                 <td className="py-2 px-4">
                                     <div className="flex justify-around items-center">
                                         <button
                                             onClick={() =>
-                                                deleteApplication(application.id)
+                                                deleteApplication(
+                                                    application.id
+                                                )
                                             }
                                         >
                                             <FaTrashCan className="text-red-500 hover:text-red-800 cursor-pointer w-5 h-5" />

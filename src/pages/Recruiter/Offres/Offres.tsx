@@ -3,7 +3,7 @@ import AuthWrapper from "../../../components/Wrapper/AuthWrapper";
 import { OffersMadeInTable } from "../../../components/Table/TablesInRecruiter";
 import Modal from "../../../components/Modal/Modal";
 import AddOfferForm from "../../../components/Forms/AddOfferForm";
-import Cookies from "js-cookie";
+import { getCookieUserId } from "../../../lib/function/getCookieUserId";
 
 export default function Offres() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,10 +11,11 @@ export default function Offres() {
     const [id, setId] = useState<string>("");
 
     useEffect(() => {
-        const idCookie = Cookies.get("id") as string;
-        if (idCookie) {
-            setId(idCookie);
+        const fetchUserId = async () => {
+            const retrievedUserId = getCookieUserId() as string;
+            setId(retrievedUserId);
         }
+        fetchUserId();
     }, []);
 
     
@@ -30,7 +31,7 @@ export default function Offres() {
 
     const renderForm = () => {
         if (activeForm === "addOffer") {
-            return <AddOfferForm id={id}  />;
+            return <AddOfferForm id={id} closeModal={closeModal}  />;
         }
     };
 

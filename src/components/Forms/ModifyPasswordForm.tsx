@@ -1,20 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdatePasswordSchema } from "../../lib/Validations/user.schema";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 import { FailedModal } from "../../components/Modal/FailedModal";
-import Axios from "../../lib/axios";
+import { updatePassword } from "../../lib/services/updateDatas";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ModifyPasswordForm({
-    id,
-}: {
-    id: string;
-}) {
+export default function ModifyPasswordForm({ id, closeModal }: { id: string, closeModal: () => void }) {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const userId: string = id;
 
     const {
         register,
@@ -26,47 +24,42 @@ export default function ModifyPasswordForm({
         mode: "onSubmit",
     });
 
-    const updatePassword = async (data: UpdatePasswordSchema) => {
+    const onInvalid = (errors: unknown) => console.error(errors);
+
+    const updateUserPassword = async (data: any) => {
         try {
-            const response = await Axios.put(
-                `/users/${id}/reset-password`,
-                data,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+            const response = await updatePassword(data, userId);
+            onInvalid(errors);
             if (response.status === 200) {
                 setIsSuccess(true);
                 setMessage("Le mot de passe a bien été modifié");
-                setIsModalOpen(true);
-                reset();
             } else {
                 setIsSuccess(false);
                 setMessage(
                     "Une erreur est survenue, veuillez réessayer plus tard"
                 );
-                setIsModalOpen(true);
-                reset();
                 console.log(
                     "Une erreur est survenue lors de la mise à jour du mot de passe",
-                    response.status,
-                    response.statusText
+                    response.status
                 );
             }
         } catch (error) {
             console.error(error, "Une erreur est survenue");
+            setIsSuccess(false);
+            setMessage(`Une erreur est survenue réessayer plus tard`);
         }
+        setIsModalOpen(true);
+        setTimeout(() => {
+            setIsModalOpen(false);
+            reset();
+            closeModal();
+        }, 3000)
     };
 
     return (
         <>
             <form
-                onSubmit={handleSubmit(updatePassword)}
+                onSubmit={handleSubmit(updateUserPassword, onInvalid)}
                 className="flex flex-col w-full items-center"
             >
                 <div className="flex flex-col mb-4 w-4/6">

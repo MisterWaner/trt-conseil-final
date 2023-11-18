@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 
 
+
+
 //Public Routes
 import Home from "./pages/public/Home/Home";
 import Offres from "./pages/public/Offres/Offres";
@@ -45,23 +47,23 @@ const router = createBrowserRouter(
                 <Route path="register" element={<Inscription />} />
             </Route>
             <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Admin />} />
+                <Route index path=":id" element={<Admin />} />
                 <Route path="consultants" element={<Consultants />} />
             </Route>
             <Route path="/consultant" element={<ConsultantLayout />}>
-                <Route index element={<Consultant />} />
-                <Route path="candidats" element={<Candidats />} />
-                <Route path="offres" element={<Offres2 />} />
+                <Route path=":id" element={<Consultant />} />
+                <Route path=":id/candidats" element={<Candidats />} />
+                <Route path=":id/offres" element={<Offres2 />} />
             </Route>
             <Route path="/recruiter" element={<RecruiterLayout />}>
-                <Route index element={<Recruiter />} />
-                <Route path="nos-offres" element={<Offres3 />} />
-                <Route path="candidatures" element={<Candidatures />} />
+                <Route path=":id" element={<Recruiter />} />
+                <Route path=":id/nos-offres" element={<Offres3 />} />
+                <Route path=":id/les-candidatures" element={<Candidatures />} />
             </Route>
             <Route path="/candidat" element={<CandidatLayout />}>
-                <Route index element={<Candidat />} />
-                <Route path="les-offres" element={<Offres4 />} />
-                <Route path="mes-candidatures" element={<Candidatures2 />} />
+                <Route path=":id" element={<Candidat />} />
+                <Route path=":id/les-offres" element={<Offres4 />} />
+                <Route path=":id/mes-candidatures" element={<Candidatures2 />} />
             </Route>
             
         </>

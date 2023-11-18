@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import handleLogout from "../../lib/function/handleLogout";
 
-const links: Array<{ label: string; href: string }> = [
-    { label: "Accueil", href: "/recruiter" },
-    { label: "Nos offres", href: "/recruiter/nos-offres" },
-    { label: "Les candidatures", href: "/recruiter/candidatures" },
-];
-
 export default function RecruiterNavbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { id } = useParams<{ id: string }>();
+
+    const links: Array<{ label: string; href: string }> = [
+        { label: "Accueil", href: `/recruiter/${id}` },
+        { label: "Nos offres", href: `/recruiter/${id}/nos-offres` },
+        { label: "Les candidatures", href: `/recruiter/${id}/les-candidatures` },
+    ];
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
