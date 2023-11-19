@@ -18,6 +18,12 @@ export interface Password {
     newPassword?: string;
 }
 
+export interface Resume {
+    name: string;
+    size: number;
+    type: string;
+}
+
 export interface Offer {
     title?: string;
     id: string;
