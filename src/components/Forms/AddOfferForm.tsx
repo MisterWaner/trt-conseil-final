@@ -58,7 +58,7 @@ export default function AddOfferForm({id, closeModal}: {id: string, closeModal: 
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col w-full items-center"
             >
-                {/* <input type="hidden" name="userId" value={userId} /> */}
+                <input type="hidden" name="userId" value={userId} />
                 <div className="flex flex-col mb-4 w-4/6">
                     <label htmlFor="title">Intitulé</label>
                     <input

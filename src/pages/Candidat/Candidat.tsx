@@ -1,29 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { FaUserNinja } from "react-icons/fa6";
 import { User } from "../../lib/types/types";
 import Axios from "../../lib/axios";
-import Cookies from "js-cookie";
 import Modal from "../../components/Modal/Modal";
 import PersonalInfoForm from "../../components/Forms/PersonalInfoForm";
 import ModifyPasswordForm from "../../components/Forms/ModifyPasswordForm";
 import AuthWrapper from "../../components/Wrapper/AuthWrapper";
+import { uploadResume } from "../../lib/services/postDatas";
 
 export default function Candidat() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
-    const [id, setId] = useState<string>("");
     const [user, setUser] = useState<User>();
+    const [uploadedFileUrl, setUploadedFileUrl] = useState<string>("");
+
+    const { id } = useParams<{ id: string }>();
+
+    console.log(uploadedFileUrl);
 
     useEffect(() => {
-        const idCookie = Cookies.get("id");
-        if (idCookie) {
-            setId(idCookie);
-        }
         async function getUser() {
             try {
                 const response = await Axios.get(`/candidats/${id}`, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
                         "Content-Type": "application/json",
                     },
                 });
@@ -33,13 +37,35 @@ export default function Candidat() {
                     console.error(response, "Une erreur est survenue");
                 }
                 setUser(response.data);
-                
             } catch (error) {
                 console.error(error, "Une erreur est survenue");
             }
         }
         getUser();
     }, [id]);
+
+    const handleChange = (event: any) => {
+        setUploadedFileUrl(event.target.files[0]);
+    };
+
+    const handleUpload = async (event: any) => {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        try {
+            const response = await uploadResume(data);
+            console.log(response.data);
+
+            if (response.status === 200) {
+                setUploadedFileUrl(response.data.fileUrl);
+                console.log(uploadedFileUrl);
+                alert("Le CV a bien été ajouté");
+            } else {
+                console.error(response, "Une erreur est survenue");
+            }
+        } catch (error) {
+            console.error(error, "Une erreur est survenue");
+        }
+    };
 
     const openModal = (formType: string) => {
         setActiveForm(formType);
@@ -57,8 +83,6 @@ export default function Candidat() {
             return <ModifyPasswordForm id={id} closeModal={closeModal} />;
         }
     };
-
-
 
     return (
         <AuthWrapper>
@@ -123,14 +147,19 @@ export default function Candidat() {
                         Ajouter mon CV
                     </h2>
                     <article className="w-5/6 mx-auto md:w-4/6 lg:w-3/6 xl:w-2/6 lg:mx-0">
-                        <form action="" className="flex flex-col">
+                        <form
+                            method="POST"
+                            onSubmit={(event) => handleUpload(event)}
+                            className="flex flex-col"
+                        >
+                            <input type="hidden" name="userId" value={id} />
                             <div className="flex flex-col mb-4">
                                 <input
                                     type="file"
                                     name="resume"
                                     id="resume"
+                                    onChange={handleChange}
                                     className="mt-5 bg-indigo-300/50 focus:ring focus:ring-indigo-300 rounded-md"
-
                                 />
                             </div>
                             <div className="flex flex-col mb-4">

@@ -6,6 +6,7 @@ export interface User {
     email?: string;
     password?: string;
     societyName?: string;
+    resume?: string;
     address?: string;
     isApproved?: boolean;
 }

@@ -8,11 +8,11 @@ import { FailedModal } from "../../components/Modal/FailedModal";
 import { updatePassword } from "../../lib/services/updateDatas";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ModifyPasswordForm({ id, closeModal }: { id: string, closeModal: () => void }) {
+export default function ModifyPasswordForm({ id, closeModal }: { id: string | undefined, closeModal: () => void }) {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const userId: string = id;
+    const userId = id;
 
     const {
         register,

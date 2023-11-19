@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { CandidatSchema } from "../../lib/Validations/user.schema";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 import { FailedModal } from "../../components/Modal/FailedModal";
 import { updateCandidateDatas } from "../../lib/services/updateDatas";
+import { CandidatSchema } from "../../lib/Validations/user.schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 
 export default function PersonalInfoForm({
     id,
     closeModal,
 }: {
-    id: string;
+    id: string | undefined;
     closeModal: () => void;
 }) {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const userId: string = id;
+    const userId = id;
 
     const {
         register,
-        reset,
         handleSubmit,
         formState: { errors },
     } = useForm<CandidatSchema>({
@@ -29,12 +29,11 @@ export default function PersonalInfoForm({
         mode: "onSubmit",
     });
 
-    const onInvalid = (errors: unknown) => console.error(errors);
 
-    const updatePersonalInfo = async (data: any) => {
-        const response = await updateCandidateDatas(data, userId);
+    const onSubmit = async (data: any) => {
         try {
-            onInvalid(errors);
+            const response = await updateCandidateDatas(data, userId);
+            console.log(response.data);
             if (response.status === 200) {
                 setIsSuccess(true);
                 setMessage("Les informations ont bien été modifiées");
@@ -49,12 +48,11 @@ export default function PersonalInfoForm({
         } catch (error) {
             console.error(error, "Une erreur est survenue");
             setIsSuccess(false);
-            setMessage(`Une erreur est survenue : ${response.data.message}`);
+            setMessage(`Une erreur est survenue`);
         }
         setIsModalOpen(true);
         setTimeout(() => {
             setIsModalOpen(false);
-            reset();
             closeModal();
         }, 3000)
     };
@@ -62,7 +60,7 @@ export default function PersonalInfoForm({
     return (
         <>
             <form
-                onSubmit={handleSubmit(updatePersonalInfo, onInvalid)}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col w-full items-center"
             >
                 <div className="flex flex-col mb-4 w-4/6">
@@ -96,7 +94,7 @@ export default function PersonalInfoForm({
                     ) : (
                         ""
                     )}
-                </div>
+                </div>  
                 <div className="flex flex-col mb-4 w-4/6">
                     <button
                         type="submit"

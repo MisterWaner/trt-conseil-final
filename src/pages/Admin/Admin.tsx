@@ -24,6 +24,10 @@ export default function Admin() {
         message: "",
     });
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     const onInvalid = (errors: unknown) => console.error(errors);
 
     const onSubmit = async (data: unknown) => {
@@ -41,11 +45,16 @@ export default function Admin() {
                 setModalContent({
                     message: "Une erreur est survenue, veuillez réessayer",
                 });
-                setIsModalOpen(true);
             }
         } catch (error) {
             console.error("Une erreur est survenue", error);
         }
+        setIsModalOpen(true);
+        setTimeout(() => {
+            setIsModalOpen(false);
+            reset();
+            closeModal();
+        }, 3000)
     };
 
     return (

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export const RegisterSchema = z.object({
+export const RegisterSchema = z
+    .object({
         email: z
             .string()
             .min(1, { message: "Veuillez renseigner votre adresse email" })
@@ -110,7 +111,8 @@ export const CandidatSchema = z.object({
         })
         .max(50, {
             message: "Votre nom doit contenir au maximum 50 caractères",
-        }),
+        })
+        .trim()
 });
 
 export const UserSchema = z.object({
@@ -129,8 +131,7 @@ export const UserSchema = z.object({
         .max(50, {
             message: "Votre prénom doit contenir au maximum 50 caractères",
         })
-        .trim()
-        ,
+        .trim(),
     lastname: z
         .string()
         .min(2, {
@@ -161,7 +162,8 @@ export const UserSchema = z.object({
         .trim(),
 });
 
-export const UpdatePasswordSchema = z.object({
+export const UpdatePasswordSchema = z
+    .object({
         currentPassword: z
             .string()
             .min(1, {
