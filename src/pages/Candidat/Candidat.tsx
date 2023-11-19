@@ -118,7 +118,7 @@ export default function Candidat() {
                                 </button>
                             </li>
                             <li className="flex flex-col md:flex-row md:items-center md:justify-between mt-5">
-                                <p className="lg:mr-5 text-sm md:text-base ">
+                                <p className=" text-sm md:text-base ">
                                     Informations professionnelles :{" "}
                                 </p>
                                 <button
