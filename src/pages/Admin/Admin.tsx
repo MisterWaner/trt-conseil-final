@@ -7,7 +7,10 @@ import Axios from "../../lib/axios";
 import { RegisterConsultantSchema } from "../../lib/Validations/user.schema";
 import { SuccessModal } from "../../components/Modal/SuccessModal";
 
+
 export default function Admin() {
+
+
     const {
         register,
         handleSubmit,

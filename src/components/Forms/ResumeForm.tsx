@@ -39,7 +39,7 @@ export default function ResumeForm({ id, closeModal }: Props) {
                 setIsSuccess(false);
                 setMessage("Une erreur est survenue, veuillez réessayer");
                 console.log(
-                    "Une erreur est survenue lors de la mise à jour du mot de passe",
+                    "Une erreur est survenue lors de la mise à jour CV",
                     response.status
                 );
             }
