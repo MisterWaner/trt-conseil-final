@@ -68,7 +68,7 @@ export async function updateCandidateDatas(data: any, id: string | undefined) {
 
 export async function updateResume(data: any, id: string | undefined) {
     try {
-        const response = await Axios.put(`/resumes/:id`, {data, id}, {
+        const response = await Axios.put(`/resumes/${id}`, {data}, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },

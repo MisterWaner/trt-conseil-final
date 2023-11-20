@@ -14,10 +14,9 @@ export default function Candidat() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeForm, setActiveForm] = useState<string | null>(null);
     const [user, setUser] = useState<User>();
-
+    const [resumePath, setResumePath] = useState<string>("");
 
     const { id } = useParams<{ id: string }>();
-
 
     useEffect(() => {
         async function getUser() {
@@ -41,6 +40,27 @@ export default function Candidat() {
             }
         }
         getUser();
+        async function getResume() {
+            try {
+                const response = await Axios.get(`/candidats/${id}/resume`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (response.status === 200) {
+                    console.log(response.data);
+                } else {
+                    console.error(response, "Une erreur est survenue");
+                }
+                setResumePath(response.data.path);
+            } catch (error) {
+                console.error(error, "Une erreur est survenue");
+            }
+        }
+        getResume();
     }, [id]);
 
     const openModal = (formType: string) => {
@@ -85,9 +105,7 @@ export default function Candidat() {
                             <p className="font-medium text-xl ">
                                 {user?.firstname} {user?.lastname}
                             </p>
-                            <p className="font-medium text-xl">
-                                {user?.email}
-                            </p>
+                            <p className="font-medium text-xl">{user?.email}</p>
                         </div>
                     </article>
                     <article className="mt-5 flex flex-col justify-center items-center">
@@ -129,6 +147,18 @@ export default function Candidat() {
                                 </button>
                             </li>
                         </ul>
+                    </article>
+                </section>
+                <section className="w-full mx-auto mt-10 grid grid-cols-1">
+                    <article className="flex flex-col justify-center items-center">
+                        <h2 className="text-lg underline underline-offset-2 text-center lg:text-start lg:text-xl">
+                            Mon CV
+                        </h2>
+                        <div className="flex flex-col items-center justify-center mt-5 md:w-[300px]">
+                            <p className="font-medium text-xl ">
+                                {resumePath}
+                            </p>
+                        </div>
                     </article>
                 </section>
             </div>

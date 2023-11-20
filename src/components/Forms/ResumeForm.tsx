@@ -16,9 +16,12 @@ export default function ResumeForm({ id, closeModal }: Props) {
     const [uploadedFileUrl, setUploadedFileUrl] = useState<string>("");
     const userId = id;
 
+
     const handleChange = (event: any) => {
         setUploadedFileUrl(event.target.files[0]);
     };
+
+     
 
     const onSubmit = async (event: any) => {
         event.preventDefault();
@@ -51,6 +54,8 @@ export default function ResumeForm({ id, closeModal }: Props) {
             closeModal();
         }, 3000);
     };
+
+    
 
     return (
         <>
