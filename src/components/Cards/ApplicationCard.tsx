@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
     FaCircleCheck,
     FaCircleXmark,
@@ -11,8 +12,10 @@ interface ApplicationCardProps {
     deleteApplication: (id: string) => void;
 }
 
-export default function ApplicationCard({ application, deleteApplication }: ApplicationCardProps) {
-
+export default function ApplicationCard({
+    application,
+    deleteApplication,
+}: ApplicationCardProps) {
     const date = application.applicationDate.toLocaleString().split("T")[0];
     const reverseDate = date.split("-").reverse().join("-");
 
@@ -22,24 +25,36 @@ export default function ApplicationCard({ application, deleteApplication }: Appl
                 <div className="flex flex-col mb-2">
                     <h5 className="font-semibold">
                         {
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             application.offer.title
                         }
                     </h5>
-                    <p className="font-semibold my-4 italic">{application.offer.user.societyName }</p>
+                    <p className="font-semibold my-4 italic">
+                        {
+                            // @ts-ignore
+                            application.offer.user.societyName
+                        }
+                    </p>
                     <p className="text-sky-300 font-semibold italic">
-                        {application.offer.place}
+                        {
+                            // @ts-ignore
+                            application.offer.place
+                        }
                     </p>
                 </div>
                 <div className="text-md mb-3">
-                    {application.offer.salary} €/mois
+                    {
+                        // @ts-ignore
+                        application.offer.salary
+                    }{" "}
+                    €/mois
                 </div>
-                <div className="text-md mb-3">
-                    Postulé le : {reverseDate} 
-                </div>
+                <div className="text-md mb-3">Postulé le : {reverseDate}</div>
                 <div className="flex flex-col mb-2 w-full">
-                    <button onClick={() => deleteApplication(application.id)} className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">
+                    <button
+                        onClick={() => deleteApplication(application.id)}
+                        className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer"
+                    >
                         Annuler
                     </button>
                     <button className="flex justify-center w-full mt-2 border border-black px-3 py-1 bg-black rounded-md font-bold text-white custom-btn cursor-pointer">

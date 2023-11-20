@@ -3,7 +3,7 @@ import ApplicationCard from "../../../components/Cards/ApplicationCard";
 import Axios from "../../../lib/axios";
 import { Application } from "../../../lib/types/types";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
 import { SuccessModal } from "../../../components/Modal/SuccessModal";
 import { FailedModal } from "../../../components/Modal/FailedModal";
 
@@ -14,11 +14,12 @@ export default function Candidatures() {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
 
+    const { id } = useParams<{ id: string }>();
+    const userId = id ?? ""; // Provide a default value for id
+
+    setCandidateId(userId);
+
     useEffect(() => {
-        const idCookie = Cookies.get("id");
-        if (idCookie) {
-            setCandidateId(idCookie);
-        }
         async function getApplications() {
             try {
                 const response = await Axios.get(
