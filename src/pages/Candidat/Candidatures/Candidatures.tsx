@@ -9,13 +9,13 @@ import { FailedModal } from "../../../components/Modal/FailedModal";
 
 export default function Candidatures() {
     const [applications, setApplications] = useState<Application[]>([]);
-    const [candidateId, setCandidateId] = useState("");
+    const [candidateId, setCandidateId] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
 
     const { id } = useParams<{ id: string }>();
-    const userId = id ?? ""; // Provide a default value for id
+    const userId = id || "" ; // Provide a default value for id
 
     setCandidateId(userId);
 
