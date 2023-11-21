@@ -9,17 +9,17 @@ import { FailedModal } from "../../../components/Modal/FailedModal";
 
 export default function Candidatures() {
     const [applications, setApplications] = useState<Application[]>([]);
-    const [candidateId, setCandidateId] = useState<string>("");
+    const [candidateId, setCandidateId] = useState<string | undefined>("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const { id } = useParams<{ id: string }>();
-    const userId = id || "" ; // Provide a default value for id
+    const { id } = useParams<{ id: string | undefined }>();
+    const userId = id ; // Provide a default value for id
 
-    setCandidateId(userId);
-
+    
     useEffect(() => {
+        setCandidateId(userId);
         async function getApplications() {
             try {
                 const response = await Axios.get(
@@ -44,7 +44,7 @@ export default function Candidatures() {
             }
         }
         getApplications();
-    }, [candidateId]);
+    }, [candidateId, userId]);
 
     async function deleteApplication(id: string) {
         try {
